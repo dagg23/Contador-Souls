@@ -1,0 +1,27 @@
+#Requires AutoHotkey v2.0
+archivo_txt := "contador_souls.txt"
+
+^!Up::    Cambiar(1)
+^!Down::  Cambiar(-1)
+^!End::   Cambiar("res")
+
+Cambiar(modo) {
+    global archivo_txt
+    if !FileExist(archivo_txt)
+        FileAppend("0", archivo_txt, "UTF-8")
+    
+    contenido := FileRead(archivo_txt, "UTF-8")
+    numero := Number(RegExReplace(contenido, "[^0-9]*") || 0)
+
+    if (modo == "res")
+        numero := 0
+    else
+        numero += modo
+
+    if (numero < 0) 
+        numero := 0
+        
+    if FileExist(archivo_txt)
+        FileDelete(archivo_txt)
+    FileAppend(String(numero), archivo_txt, "UTF-8")
+}
